@@ -1,0 +1,23 @@
+#include <Servo.h>
+
+Servo myServo;
+int servoPos = 90;  // Start at the middle position
+
+void setup() {
+  Serial.begin(9600);
+  myServo.attach(9);  // Attach the servo to pin 9
+  myServo.write(servoPos);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+    
+    if (command == 'C') {  // Clockwise rotation command
+      servoPos = min(servoPos + 10, 180);  // Increment servo position
+    } else if (command == 'A') {  // Anti-clockwise rotation command
+      servoPos = max(servoPos - 10, 0);  // Decrement servo position
+    }
+    myServo.write(servoPos);  // Move servo to the new position
+  }
+}
